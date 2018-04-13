@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Murphy Stevens</title>
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+  <!-- <header></header> -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h1>Murphy Stevens</h1>
+      <button id="login-button-id">Login</button>
+    </div>
+    <ol class="note-list"></ol>
+  </div>
+  <div class="main-content">
+    <div class="menu">
+      <input type="text" name="title"/>
+      <button>Save</button>
+    </div>
+    <div class="editable-area">
+      <textarea name="note" placeholder="Note here" autofocus></textarea>
+    </div>
+  </div>
+
+  <div id="login-modal-id" class="login-modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="login-field">
+        <label>Email</label>
+        <input type="email" name="email" maxlength="20" autofocus/>
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input type="password" name="password" maxlength="20"/>
+      </div>
+      <div class="login-field submit-buttons">
+        <button>Sign up</button>
+        <button>Log in</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/scripts/index.js"></script>
+</body>
+</html>
