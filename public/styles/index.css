@@ -75,8 +75,27 @@ textarea {
 }
 
 .menu {
+  display: flex;
+  justify-content: space-between;
   background-color: #54316d;
-  padding: 0.2rem 0;
+  padding: 0.2rem 2rem;
+}
+
+.menu input {
+  background-color: #54316d;
+  color: white;
+  border: none;
+  padding: 0.1rem 0.2rem;
+}
+
+.menu input::selection {
+  background-color: white;
+  color: black;
+}
+
+.menu input:focus-within {
+  background-color:white;
+  color: black;
 }
 
 .editable-area {
@@ -90,39 +109,53 @@ textarea {
 }
 
 .login-modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
 }
 
-/* Modal Content/Box */
 .modal-content {
-    background-color: #fefefe;
-    margin: 20% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 40%;
+  position: relative;
+  background-color: #fefefe;
+  margin: 20% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+  -webkit-animation-name: animatetop;
+  animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s
+}
+
+/***** Animations for modal *****/
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .login-field {
