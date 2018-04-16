@@ -31,7 +31,8 @@ io.on('connection', (socket) => {
       console.log('token', token);
       callback(null, token);
     }).catch((err) => {
-      callback(err);
+      //err showing up as undefined
+      callback("Email and password combination don't match any records.");
     });
   });
 

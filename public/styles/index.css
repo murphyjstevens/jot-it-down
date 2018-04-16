@@ -5,6 +5,12 @@
   font-size: 1rem;
 }
 
+/* Global CSS */
+.hide {
+  display: none;
+}
+/* End Global CSS */
+
 body {
   display: flex;
   flex-direction: row;
@@ -106,6 +112,7 @@ textarea {
 
 .editable-area > textarea {
   width: 100%;
+  padding: 0.5rem;
 }
 
 .login-modal {
@@ -124,10 +131,10 @@ textarea {
 .modal-content {
   position: relative;
   background-color: #fefefe;
-  margin: 20% auto;
+  margin: 20vh auto 20vh auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 40%;
+  width: 30%;
   -webkit-animation-name: animatetop;
   animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
@@ -174,9 +181,13 @@ textarea {
   margin-bottom: 7px;
 }
 
-.login-field input, .login-field select {
+.login-field input {
   border: 1px solid #e1e1e1;
   padding: 10px;
+}
+
+.error {
+  box-shadow: 0 0 5px 1px red;
 }
 
 .submit-buttons {
@@ -214,4 +225,10 @@ textarea {
   background-color: #54316d;
   color: white;
   border: 2px solid #54316d;
+}
+
+.error-message {
+  background-color: #ffbbbb;
+  border: 1px solid red;
+  padding: 0.2rem;
 }
