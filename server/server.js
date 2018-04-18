@@ -10,7 +10,7 @@ const socketIO = require('socket.io');
 
 const {authenticate} = require('./middleware/authenticate');
 const {mongoose} = require('./db/mongoose')
-const {Todo} = require('./models/todo');
+const {Note} = require('./models/note');
 const {User} = require('./models/user');
 
 const port = process.env.PORT;
@@ -45,6 +45,32 @@ io.on('connection', (socket) => {
     }).then((token) => {
       console.log('token', token);
       callback(null, token);
+    }).catch((err) => {
+      callback(err);
+    });
+  });
+
+  socket.on('save', (params, callback) => {
+    User.findByToken(params.userToken).then((user) => {
+      var note = new Note({
+        title: params.title,
+        text: params.text,
+        _creator: user._id
+      });
+      return note.save();
+    }).then(() => {
+      console.log('Added note');
+      callback();
+    }).catch((err) => {
+      callback(err);
+    });
+  });
+
+  socket.on('updateNoteList', (params, callback) => {
+    User.findByToken(params.userToken).then((user) => {
+      return Note.find({_creator: user._id});
+    }).then((noteList) => {
+      callback(null, noteList);
     }).catch((err) => {
       callback(err);
     });

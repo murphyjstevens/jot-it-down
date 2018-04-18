@@ -1,17 +1,16 @@
 // Login Modal
-var modal = document.getElementById('login-modal-id');
-var span = document.getElementsByClassName("close")[0];
+var loginModal = document.getElementById('login-modal-id');
 
 jQuery('#login-button-id').click(function() {
-  modal.style.display = "block";
+  openLoginModal();
 });
 
-span.onclick = function() {
+jQuery('#close').click(function() {
   closeLoginModal();
-}
+});
 
 window.onclick = function(event) {
-  if (event.target == modal) {
+  if (event.target == loginModal) {
     closeLoginModal();
   }
 }
@@ -21,24 +20,27 @@ function closeLoginModal() {
   jQuery('#email').val('');
   jQuery('#password').val('');
 
-  modal.style.display = 'none';
+
+  jQuery('#email').removeClass('error');
+  jQuery('#password').removeClass('error');
+  jQuery('#error-message').remove();
+
+  loginModal.style.display = 'none';
 }
 
 //Socket IO
 var socket = io();
 var userToken;
+var notes;
+var selectedNote;
 
-function setToken(token){
-  userToken = token;
-  if (token) {
-    jQuery('#login-button-id').addClass('hide');
-    jQuery('#logout-button-id').removeClass('hide');
-  } else {
-    jQuery('#login-button-id').removeClass('hide');
-    jQuery('#logout-button-id').addClass('hide');
-  }
-}
+// Sockets
+socket.on('disconnect', function () {
+  console.log('Disconnected from server');
+  // userToken = null;
+});
 
+// Login Form
 jQuery('#logout-button-id').click(function() {
   setToken(null);
 });
@@ -46,6 +48,7 @@ jQuery('#logout-button-id').click(function() {
 jQuery('#login-submit').click(function (e) {
   e.preventDefault();
   console.log('Login clicked');
+  jQuery('#error-message').remove();
 
   var emailTextbox = jQuery('#email');
   var passwordTextbox = jQuery('#password');
@@ -55,18 +58,23 @@ jQuery('#login-submit').click(function (e) {
     password: passwordTextbox.val()
   }, function (err, token) {
     if (err) {
-      displayLoginErrors('Error logging in');
+      displayLoginErrors('Email and password combination is invalid.');
       return console.log('Error', err);
     }
     console.log('Token', token);
     setToken(token);
     closeLoginModal();
+    updateNoteList();
+    if (notes) {
+      setSelectedNote(notes[0]);
+    }
   });
 });
 
 jQuery('#signup-submit').click(function (e) {
   e.preventDefault();
   console.log('Signup clicked');
+  jQuery('#error-message').remove();
 
   var emailTextbox = jQuery('#email');
   var passwordTextbox = jQuery('#password');
@@ -75,6 +83,14 @@ jQuery('#signup-submit').click(function (e) {
   var hasValidatedPassword = validatePassword(passwordTextbox);
 
   if (!hasValidatedEmail || !hasValidatedPassword) {
+    var errorParts = [];
+    if (!hasValidatedEmail){
+      errorParts.push('Email is not valid');
+    }
+    if (!hasValidatedPassword){
+      errorParts.push('Password is not valid, make sure it is 6 characters long and has 1 letter and 1 number');
+    }
+    displayLoginErrors('Error signing up', errorParts);
     return;
   }
 
@@ -92,11 +108,6 @@ jQuery('#signup-submit').click(function (e) {
   });
 });
 
-socket.on('disconnect', function () {
-  console.log('Disconnected from server');
-  // userToken = null;
-});
-
 jQuery('#email').blur(function () {
   var emailTextbox = jQuery('#email');
   validateEmail(emailTextbox);
@@ -106,6 +117,84 @@ jQuery('#password').blur(function () {
   var passwordTextbox = jQuery('#password');
   validatePassword(passwordTextbox);
 });
+
+jQuery('#password').keyup(function(event) {
+  if (event.keyCode === 13) {
+    jQuery('#login-submit').click();
+  }
+});
+
+//End Login Form
+
+// Save button
+jQuery('#save').click(function () {
+  if(!userToken) {
+    return openLoginModal();
+  }
+  var title = jQuery('#title').val();
+  var text = jQuery('#note').val();
+  socket.emit('save', {
+    userToken,
+    title,
+    text
+  }, function (err) {
+    if(err){
+      return console.log(err);
+    }
+    console.log(`Added note with title of ${title}`);
+    updateNoteList();
+  });
+});
+
+//Helper functions
+function setToken(token){
+  userToken = token;
+  if (token) {
+    jQuery('#login-button-id').addClass('hide');
+    jQuery('#logout-button-id').removeClass('hide');
+  } else {
+    jQuery('#login-button-id').removeClass('hide');
+    jQuery('#logout-button-id').addClass('hide');
+  }
+}
+
+function setSelectedNote(note){
+  selectedNote = note;
+  if (selectedNote) {
+    jQuery('#title').val(selectedNote.title);
+    jQuery('#note').val(selectedNote.text);
+  } else {
+    jQuery('#title').val('');
+    jQuery('#note').val('');
+  }
+}
+
+function openLoginModal() {
+  loginModal.style.display = 'block';
+}
+
+function updateNoteList() {
+  socket.emit('updateNoteList', {userToken}, function (err, noteList) {
+    if(err){
+      return console.log(err);
+    }
+    console.log(noteList);
+    var ol = jQuery('#note-list');
+    ol.empty();
+
+    noteList ? ol.removeClass('hide') : ol.addClass('hide');
+    if (noteList) {
+      noteList.forEach(function(note){
+        var li = jQuery('<li class="note-item"></li>');
+        var noteTitle = (note.title ? note.title : 'Untitled');
+        var a = jQuery('<a class="note"></a>').text(noteTitle);
+        li.append(a);
+        ol.append(li);
+      });
+    }
+    notes = noteList;
+  });
+}
 
 function validateEmail(emailTextbox) {
   if (emailTextbox.val().match(/^.+@.+\..{2,}$/)) {
@@ -127,21 +216,16 @@ function validatePassword(passwordTextbox) {
   }
 }
 
-jQuery("#password").keyup(function(event) {
-  if (event.keyCode === 13) {
-    jQuery("#login-submit").click();
-  }
-});
-
 function displayLoginErrors(message, parts) {
-  var div = jQuery('<div class="error-message"></div>');
+  var div = jQuery('<div class="error-message" id="error-message"></div>');
 
   div.append(jQuery('<h5></h5>').text(message));
-  div.append(jQuery('<ul></ul>'));
+  var ul = jQuery('<ul></ul>');
   if(parts) {
     parts.forEach(function(part) {
-      div.append(jQuery('<li></li>').text(part));
+      ul.append(jQuery('<li></li>').text(part));
     });
   }
+  div.append(ul);
   jQuery('#email-field').before(div);
 }

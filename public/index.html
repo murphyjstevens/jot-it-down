@@ -15,21 +15,21 @@
       <button id="login-button-id">Login</button>
       <button id="logout-button-id" class="hide">Logout</button>
     </div>
-    <ol class="note-list"></ol>
+    <ol class="note-list hide" id="note-list"></ol>
   </div>
   <div class="main-content">
     <div class="menu">
-      <input type="text" name="title" placeholder="Insert title here"/>
-      <button>Save</button>
+      <input type="text" name="title" id="title" placeholder="Insert title here"/>
+      <button id="save">Save</button>
     </div>
     <div class="editable-area">
-      <textarea name="note" placeholder="Note here" autofocus></textarea>
+      <textarea name="note" id="note" placeholder="Note here" autofocus></textarea>
     </div>
   </div>
 
   <div id="login-modal-id" class="login-modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <div class="close" id="close">&times;</div>
       <div class="login-field" id="email-field">
         <label>Email</label>
         <input type="email" name="email" id="email" placeholder="E-mail address" maxlength="20" autofocus/>

@@ -7,7 +7,7 @@
 
 /* Global CSS */
 .hide {
-  display: none;
+  display: none !important;
 }
 /* End Global CSS */
 
@@ -18,8 +18,6 @@ body {
 }
 
 button {
-  /* background-color: #f1e8ff; */
-  /* background-color: #b7adcf; */
   background-color: #f5e6cc;
   color: #54316d;
   padding: 0.5rem 1rem;
@@ -31,7 +29,6 @@ button {
 
 button:hover {
   background-color: #ffffff;
-  /* transition: background-color 0.3s; */
 }
 
 button:active {
@@ -39,11 +36,14 @@ button:active {
 }
 
 textarea {
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
+  border: none;
 }
 
+/********** Sidebar **********/
 .sidebar {
   display: flex;
+  flex-direction: column;
   width: 12rem;
   height: 100vh;
   background-color: #54316d;
@@ -59,19 +59,47 @@ textarea {
 
 .sidebar-header h1 {
   text-align: center;
-  margin: 1rem 0;
+  padding: 0.72rem 0;
   font-weight: normal;
   font-size: 1.3rem;
   color: #ffffff;
+  border-bottom: 1px solid white;
+}
+
+.sidebar-header button {
+  margin: 1rem 0;
 }
 
 .note-list {
   list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-top: 1px solid #eeeeee;
 }
 
-.note-list li {
-  background-color: #eeeeee;
+.note-item {
+  display: flex;
+  margin: 0;
+  padding: 0;
 }
+
+.note {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid #eeeeee;
+  margin: 0;
+  padding: 1rem;
+}
+
+.note:hover {
+  background-color: #f5e6cc;
+  cursor: pointer;
+}
+
+/********** End Sidebar **********/
 
 .main-content {
   display: flex;
@@ -81,10 +109,12 @@ textarea {
 }
 
 .menu {
+  height: 3rem;
   display: flex;
   justify-content: space-between;
   background-color: #54316d;
   padding: 0.2rem 2rem;
+  border-left: 1px solid white;
 }
 
 .menu input {
@@ -132,7 +162,7 @@ textarea {
   position: relative;
   background-color: #fefefe;
   margin: 20vh auto 20vh auto;
-  padding: 20px;
+  padding: 10px 20px 20px 20px;
   border: 1px solid #888;
   width: 30%;
   -webkit-animation-name: animatetop;
@@ -153,7 +183,8 @@ textarea {
 
 .close {
   color: #aaa;
-  float: right;
+  display: block;
+  text-align:right;
   font-size: 28px;
   font-weight: bold;
 }
@@ -169,11 +200,7 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  margin: 20px;
-}
-
-.login-field > * {
-  /* width: 100%; */
+  margin: 0 20px 20px 20px;
 }
 
 .login-field label {
@@ -231,4 +258,13 @@ textarea {
   background-color: #ffbbbb;
   border: 1px solid red;
   padding: 0.2rem;
+}
+
+.error-message ul {
+  padding-left: 0.8rem;
+  /* list-style: none; */
+}
+
+.error-message ul li {
+  font-size: 0.7rem;
 }
