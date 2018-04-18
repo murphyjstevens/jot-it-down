@@ -14,16 +14,17 @@
       <h1>Jot It Down</h1>
       <button id="login-button-id">Login</button>
       <button id="logout-button-id" class="hide">Logout</button>
+      <button id="add-note-button-id" class="hide">Add</button>
     </div>
     <ol class="note-list hide" id="note-list"></ol>
   </div>
   <div class="main-content">
     <div class="menu">
-      <input type="text" name="title" id="title" placeholder="Insert title here"/>
+      <input type="text" name="title" id="title" placeholder="Insert title here" autocomplete="off"/>
       <button id="save">Save</button>
     </div>
     <div class="editable-area">
-      <textarea name="note" id="note" placeholder="Note here" autofocus></textarea>
+      <textarea name="note" id="note" placeholder="Note here" autocomplete="off" autofocus></textarea>
     </div>
   </div>
 

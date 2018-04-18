@@ -36,7 +36,8 @@ var selectedNote;
 
 // Sockets
 socket.on('disconnect', function () {
-  console.log('Disconnected from server');
+  //Seems to get called randomly a lot - might be nodemon
+  // console.log('Disconnected from server');
   // userToken = null;
 });
 
@@ -131,19 +132,42 @@ jQuery('#save').click(function () {
   if(!userToken) {
     return openLoginModal();
   }
+  var noteId;
+  if (selectedNote) {
+    noteId = selectedNote._id;
+  }
   var title = jQuery('#title').val();
   var text = jQuery('#note').val();
   socket.emit('save', {
     userToken,
+    noteId,
     title,
     text
   }, function (err) {
     if(err){
       return console.log(err);
     }
-    console.log(`Added note with title of ${title}`);
+    console.log(`Saved note with title of ${title}`);
     updateNoteList();
   });
+});
+
+//Add note
+jQuery('#add-note-button-id').click(function() {
+  socket.emit('save', {
+    userToken
+  }, function (err) {
+    if (err) {
+      return console.log(err);
+    }
+    updateNoteList();
+  });
+});
+
+//On Note Click
+jQuery(".note-list").on('click', '.note-item', function () {
+  var index = jQuery('.note-item').index(this);
+  setSelectedNote(notes[index]);
 });
 
 //Helper functions
@@ -152,9 +176,11 @@ function setToken(token){
   if (token) {
     jQuery('#login-button-id').addClass('hide');
     jQuery('#logout-button-id').removeClass('hide');
+    jQuery('#add-note-button-id').removeClass('hide');
   } else {
     jQuery('#login-button-id').removeClass('hide');
     jQuery('#logout-button-id').addClass('hide');
+    jQuery('#add-note-button-id').addClass('hide');
   }
 }
 

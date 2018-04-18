@@ -52,14 +52,26 @@ io.on('connection', (socket) => {
 
   socket.on('save', (params, callback) => {
     User.findByToken(params.userToken).then((user) => {
-      var note = new Note({
-        title: params.title,
-        text: params.text,
-        _creator: user._id
-      });
-      return note.save();
+      if (params.noteId) {
+        return Note.findOneAndUpdate({
+          _id: params.noteId,
+          _creator: user._id
+        },{
+          $set: {
+            "title": params.title,
+            "text": params.text
+          }
+        }, {});
+      } else {
+        var note = new Note({
+          title: params.title,
+          text: params.text,
+          _creator: user._id
+        });
+        return note.save();
+      }
     }).then(() => {
-      console.log('Added note');
+      console.log('Note saved');
       callback();
     }).catch((err) => {
       callback(err);

@@ -36,8 +36,7 @@ button:active {
 }
 
 textarea {
-  /* border: 1px solid gray; */
-  border: none;
+  border: 1px solid #eeeeee;
 }
 
 /********** Sidebar **********/
@@ -47,7 +46,6 @@ textarea {
   width: 12rem;
   height: 100vh;
   background-color: #54316d;
-  /* border-right: 2px solid #54316d; */
   overflow-y: scroll;
 }
 
@@ -94,6 +92,10 @@ textarea {
   padding: 1rem;
 }
 
+.note:active {
+  background-color: gray;
+}
+
 .note:hover {
   background-color: #f5e6cc;
   cursor: pointer;
@@ -122,6 +124,7 @@ textarea {
   color: white;
   border: none;
   padding: 0.1rem 0.2rem;
+  width: auto;
 }
 
 .menu input::selection {
