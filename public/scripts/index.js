@@ -50,7 +50,6 @@ jQuery('#logout-button-id').click(function() {
 
 jQuery('#login-submit').click(function (e) {
   e.preventDefault();
-  console.log('Login clicked');
   jQuery('#error-message').remove();
 
   var emailTextbox = jQuery('#email');
@@ -64,7 +63,6 @@ jQuery('#login-submit').click(function (e) {
       displayLoginErrors('Email and password combination is invalid.');
       return console.log('Error', err);
     }
-    console.log('Token', token);
     setToken(token);
     closeLoginModal();
     updateNoteList(function () {
@@ -170,7 +168,6 @@ jQuery('#remove-note-button-id').click(function () {
       if (err) {
         return console.log(err);
       }
-      console.log('Note was removed');
       updateNoteList(function (err) {
         if (err) {
           return;
@@ -179,7 +176,6 @@ jQuery('#remove-note-button-id').click(function () {
           index = notes.length - 1;
         }
         setSelectedNote(notes[index]);
-        console.log('The selected note is', selectedNote);
       });
     });
   }

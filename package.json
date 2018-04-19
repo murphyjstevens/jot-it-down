@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha server/**/*.test.js --exit"
+    "test": ""
   },
   "engines": {
     "node": "9.9.0"
@@ -14,18 +14,12 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
-    "lodash": "^4.17.5",
     "mongodb": "^3.0.5",
     "mongoose": "^5.0.14",
     "socket.io": "^2.1.0",
     "validator": "^9.4.1"
   },
-  "devDependencies": {
-    "expect": "^22.4.3",
-    "mocha": "^5.0.5",
-    "supertest": "^3.0.0"
-  }
+  "devDependencies": {}
 }
