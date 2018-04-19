@@ -9,19 +9,28 @@
 </head>
 <body>
   <!-- <header></header> -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h1>Jot It Down</h1>
-      <button id="login-button-id">Login</button>
-      <button id="logout-button-id" class="hide">Logout</button>
-      <button id="add-note-button-id" class="hide">Add</button>
+      <img src="images/x-icon.svg" id="burger-close" class="burger-icon">
+    </div>
+    <div class="sidebar-buttons">
+      <button class="sidebar-button" id="login-button-id">Login</button>
+      <button class="sidebar-button hide" id="logout-button-id">Logout</button>
+      <button class="sidebar-button hide" id="add-note-button-id">Add</button>
     </div>
     <ol class="note-list hide" id="note-list"></ol>
   </div>
   <div class="main-content">
     <div class="menu">
-      <input type="text" name="title" id="title" placeholder="Insert title here" autocomplete="off"/>
-      <button id="save">Save</button>
+      <div class="left-side-menu">
+        <img src="images/hamburger.svg" id="burger-open" class="burger-icon">
+        <input type="text" name="title" id="title" placeholder="Insert title here" autocomplete="off"/>
+      </div>
+      <div class="note-buttons">
+        <button class="note-button" id="remove-note-button-id">Remove</button>
+        <button class="note-button" id="save">Save</button>
+      </div>
     </div>
     <div class="editable-area">
       <textarea name="note" id="note" placeholder="Note here" autocomplete="off" autofocus></textarea>

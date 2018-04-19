@@ -20,15 +20,18 @@ body {
 button {
   background-color: #f5e6cc;
   color: #54316d;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 1rem;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  border: none;
+  border: 3px solid #f5e6cc;
+  height: 2rem;
 }
 
 button:hover {
   background-color: #ffffff;
+  border: 3px solid #f5e6cc;
+  cursor: pointer;
 }
 
 button:active {
@@ -51,8 +54,8 @@ textarea {
 
 .sidebar-header {
   display: flex;
-  flex-direction: column;
   width: 100%;
+  border-bottom: 1px solid white;
 }
 
 .sidebar-header h1 {
@@ -61,11 +64,20 @@ textarea {
   font-weight: normal;
   font-size: 1.3rem;
   color: #ffffff;
-  border-bottom: 1px solid white;
 }
 
-.sidebar-header button {
+#burger-close {
+  margin: auto 1rem auto 0;
+}
+
+.sidebar-buttons {
+  display: flex;
+  justify-content: center;
   margin: 1rem 0;
+}
+
+.sidebar-button {
+  margin: 0 1rem;
 }
 
 .note-list {
@@ -75,7 +87,7 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  border-top: 1px solid #eeeeee;
+  border-top: 3px solid white;
 }
 
 .note-item {
@@ -87,18 +99,56 @@ textarea {
 .note {
   width: 100%;
   background-color: white;
-  border-bottom: 1px solid #eeeeee;
+  color: #54316d;
+  border-bottom: 3px solid white;
   margin: 0;
   padding: 1rem;
 }
 
-.note:active {
-  background-color: gray;
-}
-
 .note:hover {
   background-color: #f5e6cc;
+  color: #54316d;
   cursor: pointer;
+}
+
+.note-active a {
+  background-color: #54316d;
+  color: white;
+}
+
+@media (max-width: 45em){
+  .sidebar {
+    display: none;
+  }
+
+  .sidebar-open {
+    display: block;
+    position: fixed;
+    float: left;
+    top: 0;
+    left: 0;
+    width: 200px;
+    border-right: 1px solid white;
+    -webkit-animation-name: animateleft;
+    animation-name: animateleft;
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s
+  }
+
+  .sidebar h1 {
+    text-align: left;
+    margin: 0 1rem;
+  }
+
+  /***** Animations for modal *****/
+  @-webkit-keyframes animateleft {
+      from {left:-300px; opacity:0}
+      to {left:0; opacity:1}
+  }
+  @keyframes animateleft {
+    from {left: -300px; opacity: 0}
+    to {left: 0; opacity: 1}
+  }
 }
 
 /********** End Sidebar **********/
@@ -110,13 +160,18 @@ textarea {
   flex: 1;
 }
 
+/********** Header **********/
 .menu {
   height: 3rem;
   display: flex;
   justify-content: space-between;
   background-color: #54316d;
-  padding: 0.2rem 2rem;
+  padding: 0.2rem 2px;
   border-left: 1px solid white;
+}
+
+.left-side-menu {
+  display: flex;
 }
 
 .menu input {
@@ -137,6 +192,36 @@ textarea {
   color: black;
 }
 
+.burger-icon {
+  cursor: pointer;
+  display: none;
+  height: 2rem;
+  width: 2rem;
+}
+
+#burger-open {
+  margin: auto 1rem;
+}
+
+.note-buttons {
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+}
+
+.note-button {
+  margin: 0.2rem 2rem 0.2rem 0;
+}
+
+@media (max-width: 45em) {
+  .burger-icon {
+    display: block;
+  }
+}
+
+/********** End Header **********/
+
+/********** Main Note Area **********/
 .editable-area {
   display: flex;
   height: 100vh;
@@ -147,6 +232,8 @@ textarea {
   width: 100%;
   padding: 0.5rem;
 }
+
+/********** Login Modal **********/
 
 .login-modal {
   display: none;
@@ -167,11 +254,17 @@ textarea {
   margin: 20vh auto 20vh auto;
   padding: 10px 20px 20px 20px;
   border: 1px solid #888;
-  width: 30%;
+  width: 40%;
   -webkit-animation-name: animatetop;
   animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s
+}
+
+@media (max-width: 45em) {
+  .modal-content {
+    width: 80%;
+  }
 }
 
 /***** Animations for modal *****/

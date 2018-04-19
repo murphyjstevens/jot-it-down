@@ -44,6 +44,8 @@ socket.on('disconnect', function () {
 // Login Form
 jQuery('#logout-button-id').click(function() {
   setToken(null);
+  updateNoteList();
+  setSelectedNote(null);
 });
 
 jQuery('#login-submit').click(function (e) {
@@ -65,10 +67,11 @@ jQuery('#login-submit').click(function (e) {
     console.log('Token', token);
     setToken(token);
     closeLoginModal();
-    updateNoteList();
-    if (notes) {
-      setSelectedNote(notes[0]);
-    }
+    updateNoteList(function () {
+      if (notes) {
+        setSelectedNote(notes[0]);
+      }
+    });
   });
 });
 
@@ -152,6 +155,36 @@ jQuery('#save').click(function () {
   });
 });
 
+// Remove button
+jQuery('#remove-note-button-id').click(function () {
+  if (!selectedNote) {
+    return;
+  }
+
+  if (confirm(`Are you sure you want to delete the note titled "${selectedNote.title}"`)) {
+    var index = notes.indexOf(selectedNote);
+    socket.emit('remove', {
+      userToken,
+      noteId: selectedNote._id
+    }, function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log('Note was removed');
+      updateNoteList(function (err) {
+        if (err) {
+          return;
+        }
+        if (index >= notes.length && notes.length > 0) {
+          index = notes.length - 1;
+        }
+        setSelectedNote(notes[index]);
+        console.log('The selected note is', selectedNote);
+      });
+    });
+  }
+});
+
 //Add note
 jQuery('#add-note-button-id').click(function() {
   socket.emit('save', {
@@ -170,6 +203,14 @@ jQuery(".note-list").on('click', '.note-item', function () {
   setSelectedNote(notes[index]);
 });
 
+jQuery('#burger-open').click(function () {
+  jQuery('#sidebar').addClass('sidebar-open');
+});
+
+jQuery('#burger-close').click(function () {
+  jQuery('#sidebar').removeClass('sidebar-open');
+});
+
 //Helper functions
 function setToken(token){
   userToken = token;
@@ -177,18 +218,23 @@ function setToken(token){
     jQuery('#login-button-id').addClass('hide');
     jQuery('#logout-button-id').removeClass('hide');
     jQuery('#add-note-button-id').removeClass('hide');
+    jQuery('#remove-note-button-id').removeClass('hide');
   } else {
     jQuery('#login-button-id').removeClass('hide');
     jQuery('#logout-button-id').addClass('hide');
     jQuery('#add-note-button-id').addClass('hide');
+    jQuery('#remove-note-button-id').addClass('hide');
   }
 }
 
 function setSelectedNote(note){
   selectedNote = note;
+  jQuery('.note-active').removeClass('note-active');
   if (selectedNote) {
     jQuery('#title').val(selectedNote.title);
     jQuery('#note').val(selectedNote.text);
+    var index = notes.indexOf(selectedNote);
+    jQuery(`.note-item:nth-child(${index + 1})`).addClass('note-active');
   } else {
     jQuery('#title').val('');
     jQuery('#note').val('');
@@ -199,12 +245,11 @@ function openLoginModal() {
   loginModal.style.display = 'block';
 }
 
-function updateNoteList() {
+function updateNoteList(callback) {
   socket.emit('updateNoteList', {userToken}, function (err, noteList) {
     if(err){
-      return console.log(err);
+      return callback ? callback(err) : console.log(err);
     }
-    console.log(noteList);
     var ol = jQuery('#note-list');
     ol.empty();
 
@@ -219,6 +264,9 @@ function updateNoteList() {
       });
     }
     notes = noteList;
+    if(callback){
+      callback();
+    }
   });
 }
 

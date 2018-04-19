@@ -78,6 +78,20 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('remove', (params, callback) => {
+    User.findByToken(params.userToken).then((user) => {
+      return Note.findOneAndRemove({
+        _id: params.noteId,
+        _creator: user._id
+      });
+    }).then((note) => {
+      console.log('Note removed');
+      callback();
+    }).catch((err) => {
+      callback(err);
+    });
+  });
+
   socket.on('updateNoteList', (params, callback) => {
     User.findByToken(params.userToken).then((user) => {
       return Note.find({_creator: user._id});
